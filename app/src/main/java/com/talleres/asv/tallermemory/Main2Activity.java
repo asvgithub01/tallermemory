@@ -1,6 +1,8 @@
 package com.talleres.asv.tallermemory;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,8 +17,19 @@ public class Main2Activity extends AppCompatActivity {
 
 
     private static ImageView imgGatoo;
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        ImageView imgGatoo = new ImageView(this);
+        imgGatoo.setBackground(getDrawable(R.drawable.gateto));
+
+        setContentView(imgGatoo);
+
+        //ejemplo de generacion de un memoryleak
+        /*
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -34,9 +47,18 @@ public class Main2Activity extends AppCompatActivity {
                 Main2Activity.this.finish();
             }
         });
+        */
     }
 
-    @Override public void onDestroy() {
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
+
+    @Override
+    public void onDestroy() {
         super.onDestroy();
         RefWatcher refWatcher = ExampleApplication.getRefWatcher(this);
         refWatcher.watch(this);
