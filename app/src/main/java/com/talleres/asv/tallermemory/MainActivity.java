@@ -1,6 +1,8 @@
 package com.talleres.asv.tallermemory;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,18 +15,22 @@ import android.widget.ImageView;
 
 import com.squareup.leakcanary.RefWatcher;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
 
-    private static ImageView imgGato;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar  toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        imgGato=(ImageView) findViewById(R.id.imggato);
+
+        ExampleApplication.bitmapList = new ArrayList<>();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -32,6 +38,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Creating Memory Leak", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                //for (int i = 0; i < 5; i++) {
+
+                ExampleApplication.bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.gateto);
+               //bitmapList.add(bitmap);
+                ExampleApplication.bitmapList.add(ExampleApplication.bitmap);
+
+                ExampleApplication.imgGato = (ImageView) findViewById(R.id.imggato);
+                // }
+
+
                 Intent vufoIntent = new Intent(MainActivity.this, Main2Activity.class);
                 MainActivity.this.startActivity(vufoIntent);
                 MainActivity.this.finish();
@@ -39,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         super.onDestroy();
         RefWatcher refWatcher = ExampleApplication.getRefWatcher(this);
         refWatcher.watch(this);
